@@ -5,7 +5,28 @@ class Node
   # As a bonus, try including the Comparable module
     # and make nodes compare using their data attribute.
 
+  include Comparable
+
+  attr_accessor :value, :left, :right
+
+  def initialize(value)
+    @value = value
+    @left = nil
+    @right = nil
+  end
+
+  def <=>(other)
+    value <=> other.value
+  end
+
 end
+
+node1 = Node.new(5)
+node2 = Node.new(8)
+node3 = Node.new(8)
+p node1 <=> node2
+p node2 <=> node1
+p node2 <=> node3
 
 class Tree
 
