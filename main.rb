@@ -63,7 +63,7 @@ class Tree
 
   def build_tree(ary)
     ary = ary.uniq
-    merge_sort(ary)
+    ary = merge_sort(ary)
     create_bst(ary, 0, ary.length - 1)
   end
 
@@ -107,8 +107,16 @@ class Tree
   [] 8. Print out all elements in level, pre, post, and in order
 =end
 
+# from the TOP assignment
+def pretty_print(node = root, prefix="", is_left = true)
+  pretty_print(node.right, "#{prefix}#{is_left ? "│ " : " "}", false) if node.right
+  puts "#{prefix}#{is_left ? "└── " : "┌── "}#{node.value.to_s}"
+  pretty_print(node.left, "#{prefix}#{is_left ? " " : "│ "}", true) if node.left
 end
 
-tree = Tree.new([0])
+end
+
+tree = Tree.new [0]
 p new_tree = tree.build_tree([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324])
 p new_tree.value
+tree.pretty_print(new_tree)
