@@ -26,9 +26,11 @@ class Tree
   # [x] Build a Tree class which accepts an array when initialized. The Tree class should have a
     # root attribute which uses the return value of #build_tree which you’ll write next.
 
+  attr_reader :ary, :root
+
   def initialize(ary)
     @ary = ary
-    @root = build_tree(@ary)
+    @root = build_tree(ary)
   end
 
   # [x] #build_tree method which takes an array of data
@@ -52,25 +54,55 @@ class Tree
   end
 
   # from https://www.youtube.com/watch?v=VCTP81Ij-EM&feature=youtu.be
-  def create_bst(ary, start, finish)
+  def tree_from_array(ary, start, finish)
     return nil if start > finish
     midpoint = (start + finish) / 2
     root = Node.new(ary[midpoint])
-    root.left = create_bst(ary, start, midpoint - 1)
-    root.right = create_bst(ary, midpoint + 1, finish)
+    root.left = tree_from_array(ary, start, midpoint - 1)
+    root.right = tree_from_array(ary, midpoint + 1, finish)
     return root
   end
 
   def build_tree(ary)
-    ary = ary.uniq
+    ary.uniq!
     ary = merge_sort(ary)
-    create_bst(ary, 0, ary.length - 1)
+    tree_from_array(ary, 0, ary.length - 1)
   end
 
   # [] #insert and #delete method which accepts a value to insert/delete
     # (you’ll have to deal with several cases for delete such as when a node has children or not).
     # If you need additional resources, check out these two articles on inserting and deleting,
     # or this video with several visual examples.
+
+=begin
+  # from https://www.geeksforgeeks.org/binary-search-tree-set-1-search-and-insertion/?ref=lbp
+  def search(root, value)
+    return root if root.nil? || root.value == value
+    return search(root.right, value) if root.value < value
+    return search(root.left, value)
+  end
+=end
+
+  # adapted from https://www.geeksforgeeks.org/binary-search-tree-set-1-search-and-insertion/?ref=lbp
+  def attach_node(root,node)
+    if root.nil?
+      root = node
+    else
+      if root.value < node.value
+        root.right.nil? ? root.right = node : attach_node(root.right, node)
+      else
+        root.left.nil? ? root.left = node : attach_node(root.left, node)
+      end
+    end
+  end
+
+  def insert(value)
+    node = Node.new(value)
+    helper(@root, node)
+  end
+
+  def delete(value)
+  end
 
   # [] #find method which accepts a value and returns the node with the given value.
 
@@ -116,7 +148,9 @@ end
 
 end
 
-tree = Tree.new [0]
-p new_tree = tree.build_tree([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324])
-p new_tree.value
-tree.pretty_print(new_tree)
+tree = Tree.new(([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]))
+p tree.root
+p tree.ary
+tree.pretty_print
+tree.insert(10)
+tree.pretty_print
