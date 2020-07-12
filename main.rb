@@ -38,7 +38,7 @@ class Tree
     # binary tree full of Node objects appropriately placed (don’t forget to sort and remove
     # duplicates!). The #build_tree method should return the level-1 root node.
 
-  # from merge sort project
+  # from my merge sort project
   def merge(left, right)
     merged = []
     until left.empty? || right.empty?
@@ -47,7 +47,7 @@ class Tree
     merged + (right.empty? ? left : right)
   end
 
-  # from merge sort project
+  # from my merge sort project
   def merge_sort(ary)
     return ary if ary.length == 1
     return merge(merge_sort(ary[0..ary.length / 2 - 1]), merge_sort(ary[ary.length / 2..-1]))
@@ -74,37 +74,34 @@ class Tree
     # If you need additional resources, check out these two articles on inserting and deleting,
     # or this video with several visual examples.
 
-=begin
-  # from https://www.geeksforgeeks.org/binary-search-tree-set-1-search-and-insertion/?ref=lbp
-  def search(root, value)
-    return root if root.nil? || root.value == value
-    return search(root.right, value) if root.value < value
-    return search(root.left, value)
-  end
-=end
-
   # adapted from https://www.geeksforgeeks.org/binary-search-tree-set-1-search-and-insertion/?ref=lbp
-  def attach_node(root,node)
+  def insert(root, node)
     if root.nil?
       root = node
     else
-      if root.value < node.value
-        root.right.nil? ? root.right = node : attach_node(root.right, node)
+      if root < node
+        root.right.nil? ? root.right = node : insert(root.right, node)
       else
-        root.left.nil? ? root.left = node : attach_node(root.left, node)
+        root.left.nil? ? root.left = node : insert(root.left, node)
       end
     end
   end
 
-  def insert(value)
+  def new_node(value)
     node = Node.new(value)
-    helper(@root, node)
+    insert(@root, node)
   end
 
   def delete(value)
   end
 
-  # [] #find method which accepts a value and returns the node with the given value.
+  # [x] #find method which accepts a value and returns the node with the given value.
+  # adapted from https://www.geeksforgeeks.org/binary-search-tree-set-1-search-and-insertion/?ref=lbp
+  def find(root, value)
+    return root if root.nil? || root.value == value
+    return find(root.right, value) if root.value < value
+    return find(root.left, value)
+  end
 
   # [] #level_order method that returns an array of values.
     # This method should traverse the tree in breadth-first level order.
@@ -152,5 +149,6 @@ tree = Tree.new(([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]))
 p tree.root
 p tree.ary
 tree.pretty_print
-tree.insert(10)
+tree.new_node(10)
 tree.pretty_print
+p tree.find(tree.root, 23)
