@@ -44,17 +44,19 @@ class Tree
   # from my merge sort project
   def merge_sort(ary)
     return ary if ary.length == 1
-    return merge(merge_sort(ary[0..ary.length / 2 - 1]), merge_sort(ary[ary.length / 2..-1]))
+
+    merge(merge_sort(ary[0..ary.length / 2 - 1]), merge_sort(ary[ary.length / 2..-1]))
   end
 
   # adapted from https://www.youtube.com/watch?v=VCTP81Ij-EM&feature=youtu.be
   def tree_from_array(ary, start, finish)
     return nil if start > finish
+
     midpoint = (start + finish) / 2
     root = Node.new(ary[midpoint])
     root.left = tree_from_array(ary, start, midpoint - 1)
     root.right = tree_from_array(ary, midpoint + 1, finish)
-    return root
+    root
   end
 
   def build_tree(ary)
@@ -65,21 +67,21 @@ class Tree
 
   # [x] #insert and #delete method which accepts a value to insert/delete
   # adapted from https://www.geeksforgeeks.org/binary-search-tree-set-1-search-and-insertion/?ref=lbp
-  def insert(root, node)
+  def insert_node(node, root = @root)
     if root.nil?
       root = node
+    elsif root < node
+      root.right.nil? ? root.right = node : insert_node(node, root.right)
     else
-      if root < node
-        root.right.nil? ? root.right = node : insert(root.right, node)
-      else
-        root.left.nil? ? root.left = node : insert(root.left, node)
-      end
+      root.left.nil? ? root.left = node : insert_node(node, root.left)
     end
   end
 
-  def new_node_from_value(value)
+  def insert(value)
+    return if level_order.include? value
+
     node = Node.new(value)
-    insert(@root, node)
+    place_node(node)
   end
 
   # adapted from https://www.geeksforgeeks.org/binary-search-tree-set-2-delete/?ref=lbp
@@ -188,6 +190,7 @@ class Tree
   end
 
   # [x] #depth method which accepts a node and returns the depth(number of levels) beneath the node.
+  # algorithm from https://www.educative.io/edpresso/finding-the-maximum-depth-of-a-binary-tree
   def depth(node, count)
     return count if node.nil?
 
@@ -207,10 +210,22 @@ class Tree
   # [] #balanced? method which checks if the tree is balanced.
   # A balanced tree is one where the difference between heights of left subtree and right subtree
   # of every node is not more than 1.
+  # algorithm from https://www.geeksforgeeks.org/how-to-determine-if-a-binary-tree-is-balanced/
+  def balanced?(node)
 
+    #return true if node.nil?
+
+    #return true if node.left.nil? && node.right.nil?
+
+  end
+
+  def balanced_given_root?(root)
+  end
   # [] #rebalance method which rebalances an unbalanced tree.
   # Tip: You’ll want to create a level-order array of the tree before passing the array back
   # into the #build_tree method.
+  def rebalance
+  end
 
 =begin
   Write a simple driver script that does the following:
@@ -234,12 +249,17 @@ class Tree
   end
 end
 
-tree = Tree.new(([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324, 1001, 1002, 1003, 1004]))
+tree = Tree.new([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 6346, 6347, 324, 1001, 1002, 1003, 1004])
 p tree.root
 p tree.ary
 tree.pretty_print
-tree.new_node_from_value(10)
+tree.insert(10)
 tree.pretty_print
+tree.insert(63)
+tree.pretty_print
+tree.insert(63)
+tree.pretty_print
+=begin
 tree.remove_node_at_value(23)
 tree.pretty_print
 tree.remove_node_at_value(10)
@@ -256,3 +276,4 @@ p tree.ordered_array(:inorder)
 p tree.ordered_array(:preorder)
 p tree.ordered_array(:postorder)
 p tree.depth_from_node(tree.root)
+=end
