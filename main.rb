@@ -53,7 +53,7 @@ class Tree
     return merge(merge_sort(ary[0..ary.length / 2 - 1]), merge_sort(ary[ary.length / 2..-1]))
   end
 
-  # from https://www.youtube.com/watch?v=VCTP81Ij-EM&feature=youtu.be
+  # adapted from https://www.youtube.com/watch?v=VCTP81Ij-EM&feature=youtu.be
   def tree_from_array(ary, start, finish)
     return nil if start > finish
     midpoint = (start + finish) / 2
@@ -69,11 +69,7 @@ class Tree
     tree_from_array(ary, 0, ary.length - 1)
   end
 
-  # [] #insert and #delete method which accepts a value to insert/delete
-    # (you’ll have to deal with several cases for delete such as when a node has children or not).
-    # If you need additional resources, check out these two articles on inserting and deleting,
-    # or this video with several visual examples.
-
+  # [x] #insert and #delete method which accepts a value to insert/delete
   # adapted from https://www.geeksforgeeks.org/binary-search-tree-set-1-search-and-insertion/?ref=lbp
   def insert(root, node)
     if root.nil?
@@ -87,12 +83,46 @@ class Tree
     end
   end
 
-  def new_node(value)
+  def new_node_from_value(value)
     node = Node.new(value)
     insert(@root, node)
   end
 
-  def delete(value)
+  # adapted from https://www.geeksforgeeks.org/binary-search-tree-set-2-delete/?ref=lbp
+  def min_value_node(node)
+    current = node
+    while !current.left.nil?
+      current = current.left
+    end
+    return current
+  end
+
+  # adapted from https://www.geeksforgeeks.org/binary-search-tree-set-2-delete/?ref=lbp
+  def delete(root, value)
+    return root if root.nil?
+    if value < root.value
+      root.left = delete(root.left, value)
+    elsif value > root.value
+      root.right = delete(root.right, value)
+    else
+      if root.left.nil?
+        temp = root.right
+        root = nil
+        return temp
+      elsif root.right.nil?
+        temp = root.left
+        root = nil
+        return temp
+      end
+      temp = min_value_node(root.right)
+      root.value = temp.value
+      root.right = delete(root.right , temp.value)
+    end
+    return root
+  end
+
+  def remove_node_at_value(value)
+    delete(@root, value)
   end
 
   # [x] #find method which accepts a value and returns the node with the given value.
@@ -149,6 +179,16 @@ tree = Tree.new(([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]))
 p tree.root
 p tree.ary
 tree.pretty_print
-tree.new_node(10)
+tree.new_node_from_value(10)
+tree.pretty_print
+tree.remove_node_at_value(23)
+tree.pretty_print
+tree.remove_node_at_value(10)
+tree.pretty_print
+tree.remove_node_at_value(5)
+tree.pretty_print
+tree.remove_node_at_value(67)
+tree.pretty_print
+tree.remove_node_at_value(150)
 tree.pretty_print
 p tree.find(tree.root, 23)
