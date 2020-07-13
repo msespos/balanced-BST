@@ -1,12 +1,9 @@
+# [x] Build a Node class. It should have attributes for the data it stores
+# as well as its left and right children.
+# [x] As a bonus, try including the Comparable module
+# and make nodes compare using their data attribute.
 class Node
-
-  # [x] Build a Node class. It should have attributes for the data it stores
-    # as well as its left and right children.
-  # [x] As a bonus, try including the Comparable module
-    # and make nodes compare using their data attribute.
-
   include Comparable
-
   attr_accessor :value, :left, :right
 
   def initialize(value)
@@ -18,14 +15,11 @@ class Node
   def <=>(other)
     value <=> other.value
   end
-
 end
 
+# [x] Build a Tree class which accepts an array when initialized. The Tree class should have a
+# root attribute which uses the return value of #build_tree which you’ll write next.
 class Tree
-
-  # [x] Build a Tree class which accepts an array when initialized. The Tree class should have a
-    # root attribute which uses the return value of #build_tree which you’ll write next.
-
   attr_reader :ary, :root
 
   def initialize(ary)
@@ -34,9 +28,9 @@ class Tree
   end
 
   # [x] #build_tree method which takes an array of data
-    # (e.g. [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]) and turns it into a balanced
-    # binary tree full of Node objects appropriately placed (don’t forget to sort and remove
-    # duplicates!). The #build_tree method should return the level-1 root node.
+  # (e.g. [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]) and turns it into a balanced
+  # binary tree full of Node objects appropriately placed (don’t forget to sort and remove
+  # duplicates!). The #build_tree method should return the level-1 root node.
 
   # from my merge sort project
   def merge(left, right)
@@ -94,7 +88,7 @@ class Tree
     while !current.left.nil?
       current = current.left
     end
-    return current
+    current
   end
 
   # adapted from https://www.geeksforgeeks.org/binary-search-tree-set-2-delete/?ref=lbp
@@ -113,10 +107,11 @@ class Tree
         temp = root.left
         root = nil
         return temp
+      else
+        temp = min_value_node(root.right)
+        root.value = temp.value
+        root.right = delete(root.right, temp.value)
       end
-      temp = min_value_node(root.right)
-      root.value = temp.value
-      root.right = delete(root.right , temp.value)
     end
     return root
   end
@@ -134,23 +129,25 @@ class Tree
   end
 
   # [] #level_order method that returns an array of values.
-    # This method should traverse the tree in breadth-first level order.
-    # This method can be implemented using either iteration or recursion (try implementing both!).
-    # Tip: You will want to use an array acting as a queue to keep track of all the child nodes
-    # that you have yet to traverse and to add new ones to the list (as you saw in the video).
+  # This method should traverse the tree in breadth-first level order.
+  # This method can be implemented using either iteration or recursion (try implementing both!).
+  # Tip: You will want to use an array acting as a queue to keep track of all the child nodes
+  # that you have yet to traverse and to add new ones to the list (as you saw in the video).
+  def level_order
+  end
 
   # [] #inorder, #preorder, and #postorder methods that returns an array of values. Each method
-     # should traverse the tree in their respective depth-first order.
+  # should traverse the tree in their respective depth-first order.
 
   # [] #depth method which accepts a node and returns the depth(number of levels) beneath the node.
 
   # [] #balanced? method which checks if the tree is balanced.
-    # A balanced tree is one where the difference between heights of left subtree and right subtree
-    # of every node is not more than 1.
+  # A balanced tree is one where the difference between heights of left subtree and right subtree
+  # of every node is not more than 1.
 
   # [] #rebalance method which rebalances an unbalanced tree.
-    # Tip: You’ll want to create a level-order array of the tree before passing the array back
-    # into the #build_tree method.
+  # Tip: You’ll want to create a level-order array of the tree before passing the array back
+  # into the #build_tree method.
 
 =begin
   Write a simple driver script that does the following:
@@ -166,13 +163,12 @@ class Tree
   [] 8. Print out all elements in level, pre, post, and in order
 =end
 
-# from the TOP assignment
-def pretty_print(node = root, prefix="", is_left = true)
-  pretty_print(node.right, "#{prefix}#{is_left ? "│ " : " "}", false) if node.right
-  puts "#{prefix}#{is_left ? "└── " : "┌── "}#{node.value.to_s}"
-  pretty_print(node.left, "#{prefix}#{is_left ? " " : "│ "}", true) if node.left
-end
-
+  # from the TOP instructions for this project
+  def pretty_print(node = root, prefix="", is_left = true)
+    pretty_print(node.right, "#{prefix}#{is_left ? "│ " : " "}", false) if node.right
+    puts "#{prefix}#{is_left ? "└── " : "┌── "}#{node.value.to_s}"
+    pretty_print(node.left, "#{prefix}#{is_left ? " " : "│ "}", true) if node.left
+  end
 end
 
 tree = Tree.new(([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]))
