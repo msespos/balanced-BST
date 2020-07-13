@@ -124,6 +124,7 @@ class Tree
   # adapted from https://www.geeksforgeeks.org/binary-search-tree-set-1-search-and-insertion/?ref=lbp
   def find(root, value)
     return root if root.nil? || root.value == value
+
     return find(root.right, value) if root.value < value
     return find(root.left, value)
   end
@@ -136,22 +137,66 @@ class Tree
   # adapted from https://www.youtube.com/watch?v=86g8jAQug04
   def level_order
     return if @root.nil?
+
     values = []
     queue = []
     queue.push(@root)
     while !queue.empty?
       node = queue.shift
       values.push(node.value)
-      queue.push(node.left) if !node.left.nil?
+      queue.push(node.left) if node.left
 
-      queue.push(node.right) if !node.right.nil?
+      queue.push(node.right) if node.right
 
     end
-    return values
+    values
   end
 
   # [] #inorder, #preorder, and #postorder methods that returns an array of values. Each method
   # should traverse the tree in their respective depth-first order.
+
+  # adapted from https://www.youtube.com/watch?v=gm8DUJJhmY4
+  def inorder(root, values)
+    return if root.nil?
+    inorder(root.left, values)
+    values.push(root)
+    inorder(root.right, values)
+    values
+  end
+
+  def inorder_array
+    values = []
+    values = inorder(@root, values)
+    values.map { |node| node.value }
+  end
+
+  def preorder(root, values)
+    return if root.nil?
+    values.push(root)
+    preorder(root.left, values)
+    preorder(root.right, values)
+    values
+  end
+
+  def preorder_array
+    values = []
+    values = preorder(@root, values)
+    values.map { |node| node.value }
+  end
+
+  def postorder(root, values)
+    return if root.nil?
+    postorder(root.left, values)
+    postorder(root.right, values)
+    values.push(root)
+    values
+  end
+
+  def postorder_array
+    values = []
+    values = postorder(@root, values)
+    values.map { |node| node.value }
+  end
 
   # [] #depth method which accepts a node and returns the depth(number of levels) beneath the node.
 
@@ -203,3 +248,6 @@ tree.remove_node_at_value(150)
 tree.pretty_print
 p tree.find(tree.root, 23)
 p tree.level_order
+p tree.inorder_array
+p tree.preorder_array
+p tree.postorder_array
