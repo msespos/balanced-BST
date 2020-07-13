@@ -128,12 +128,26 @@ class Tree
     return find(root.left, value)
   end
 
-  # [] #level_order method that returns an array of values.
+  # [x] #level_order method that returns an array of values.
   # This method should traverse the tree in breadth-first level order.
   # This method can be implemented using either iteration or recursion (try implementing both!).
   # Tip: You will want to use an array acting as a queue to keep track of all the child nodes
   # that you have yet to traverse and to add new ones to the list (as you saw in the video).
+  # adapted from https://www.youtube.com/watch?v=86g8jAQug04
   def level_order
+    return if @root.nil?
+    values = []
+    queue = []
+    queue.push(@root)
+    while !queue.empty?
+      node = queue.shift
+      values.push(node.value)
+      queue.push(node.left) if !node.left.nil?
+
+      queue.push(node.right) if !node.right.nil?
+
+    end
+    return values
   end
 
   # [] #inorder, #preorder, and #postorder methods that returns an array of values. Each method
@@ -188,3 +202,4 @@ tree.pretty_print
 tree.remove_node_at_value(150)
 tree.pretty_print
 p tree.find(tree.root, 23)
+p tree.level_order
