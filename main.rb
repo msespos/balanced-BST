@@ -94,6 +94,7 @@ class Tree
   # adapted from https://www.geeksforgeeks.org/binary-search-tree-set-2-delete/?ref=lbp
   def delete(root, value)
     return root if root.nil?
+
     if value < root.value
       root.left = delete(root.left, value)
     elsif value > root.value
@@ -126,6 +127,7 @@ class Tree
     return root if root.nil? || root.value == value
 
     return find(root.right, value) if root.value < value
+
     return find(root.left, value)
   end
 
@@ -152,9 +154,8 @@ class Tree
     values
   end
 
-  # [] #inorder, #preorder, and #postorder methods that returns an array of values. Each method
+  # [x] #inorder, #preorder, and #postorder methods that returns an array of values. Each method
   # should traverse the tree in their respective depth-first order.
-
   # adapted from https://www.youtube.com/watch?v=gm8DUJJhmY4
   def inorder(root, values)
     return if root.nil?
@@ -186,7 +187,22 @@ class Tree
     values.map(&:value)
   end
 
-  # [] #depth method which accepts a node and returns the depth(number of levels) beneath the node.
+  # [x] #depth method which accepts a node and returns the depth(number of levels) beneath the node.
+  def depth(node, count)
+    return count if node.nil?
+
+    return count if node.left.nil? && node.right.nil?
+
+    left_height = depth(node.left, count)
+    right_height = depth(node.right, count)
+    left_height > right_height ? count = left_height : count = right_height
+    count += 1
+  end
+
+  def depth_from_node(node)
+    count = 0
+    depth(node, count)
+  end
 
   # [] #balanced? method which checks if the tree is balanced.
   # A balanced tree is one where the difference between heights of left subtree and right subtree
@@ -218,7 +234,7 @@ class Tree
   end
 end
 
-tree = Tree.new(([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]))
+tree = Tree.new(([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324, 1001, 1002, 1003, 1004]))
 p tree.root
 p tree.ary
 tree.pretty_print
@@ -239,3 +255,4 @@ p tree.level_order
 p tree.ordered_array(:inorder)
 p tree.ordered_array(:preorder)
 p tree.ordered_array(:postorder)
+p tree.depth_from_node(tree.root)
