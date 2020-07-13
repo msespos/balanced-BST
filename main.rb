@@ -164,24 +164,12 @@ class Tree
     values
   end
 
-  def inorder_array
-    values = []
-    values = inorder(@root, values)
-    values.map { |node| node.value }
-  end
-
   def preorder(root, values)
     return if root.nil?
     values.push(root)
     preorder(root.left, values)
     preorder(root.right, values)
     values
-  end
-
-  def preorder_array
-    values = []
-    values = preorder(@root, values)
-    values.map { |node| node.value }
   end
 
   def postorder(root, values)
@@ -192,10 +180,10 @@ class Tree
     values
   end
 
-  def postorder_array
+  def ordered_array(order_type)
     values = []
-    values = postorder(@root, values)
-    values.map { |node| node.value }
+    values = send(order_type, @root, values)
+    values.map(&:value)
   end
 
   # [] #depth method which accepts a node and returns the depth(number of levels) beneath the node.
@@ -248,6 +236,6 @@ tree.remove_node_at_value(150)
 tree.pretty_print
 p tree.find(tree.root, 23)
 p tree.level_order
-p tree.inorder_array
-p tree.preorder_array
-p tree.postorder_array
+p tree.ordered_array(:inorder)
+p tree.ordered_array(:preorder)
+p tree.ordered_array(:postorder)
