@@ -94,7 +94,6 @@ class Tree
   end
 
   # adapted from https://www.geeksforgeeks.org/binary-search-tree-set-2-delete/?ref=lbp
-
   def delete(value, root = @root)
     return root if root.nil?
 
@@ -201,7 +200,7 @@ class Tree
     count += 1
   end
 
-  # [] #balanced? method which checks if the tree is balanced.
+  # [x] #balanced? method which checks if the tree is balanced.
   # A balanced tree is one where the difference between heights of left subtree and right subtree
   # of every node is not more than 1.
   # algorithm from https://www.geeksforgeeks.org/how-to-determine-if-a-binary-tree-is-balanced/
@@ -215,10 +214,11 @@ class Tree
     end
   end
 
-  # [] #rebalance method which rebalances an unbalanced tree.
+  # [x] #rebalance method which rebalances an unbalanced tree.
   # Tip: You’ll want to create a level-order array of the tree before passing the array back
   # into the #build_tree method.
   def rebalance
+    @root = build_tree(level_order)
   end
 
 =begin
@@ -272,5 +272,8 @@ p tree.ordered_array(:postorder)
 p tree.depth(tree.root)
 p tree.balanced?
 tree.insert(6348)
+tree.pretty_print
+p tree.balanced?
+tree.rebalance
 tree.pretty_print
 p tree.balanced?
