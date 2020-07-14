@@ -211,6 +211,8 @@ class Tree
 
     if (depth(node.left) - depth(node.right)).abs <= 1
       balanced?(node.left) && balanced?(node.right) ? true : false
+    else
+      return false
     end
   end
 
