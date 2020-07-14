@@ -158,6 +158,7 @@ class Tree
   # adapted from https://www.youtube.com/watch?v=gm8DUJJhmY4
   def inorder(root, values = [])
     return if root.nil?
+
     inorder(root.left, values)
     values.push(root)
     inorder(root.right, values)
@@ -166,6 +167,7 @@ class Tree
 
   def preorder(root, values = [])
     return if root.nil?
+
     values.push(root)
     preorder(root.left, values)
     preorder(root.right, values)
@@ -174,6 +176,7 @@ class Tree
 
   def postorder(root, values = [])
     return if root.nil?
+
     postorder(root.left, values)
     postorder(root.right, values)
     values.push(root)
@@ -202,16 +205,16 @@ class Tree
   # A balanced tree is one where the difference between heights of left subtree and right subtree
   # of every node is not more than 1.
   # algorithm from https://www.geeksforgeeks.org/how-to-determine-if-a-binary-tree-is-balanced/
-  def balanced?(node)
+  def balanced?(node = @root)
+    return true if node.nil?
 
-    #return true if node.nil?
+    return true if node.left.nil? && node.right.nil?
 
-    #return true if node.left.nil? && node.right.nil?
-
+    if (depth(node.left) - depth(node.right)).abs <= 1
+      balanced?(node.left) && balanced?(node.right) ? true : false
+    end
   end
 
-  def balanced_given_root?(root)
-  end
   # [] #rebalance method which rebalances an unbalanced tree.
   # Tip: You’ll want to create a level-order array of the tree before passing the array back
   # into the #build_tree method.
@@ -267,3 +270,7 @@ p tree.ordered_array(:inorder)
 p tree.ordered_array(:preorder)
 p tree.ordered_array(:postorder)
 p tree.depth(tree.root)
+p tree.balanced?
+tree.insert(6348)
+tree.pretty_print
+p tree.balanced?
