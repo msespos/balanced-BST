@@ -18,7 +18,7 @@ class Node
 end
 
 # [x] Build a Tree class which accepts an array when initialized. The Tree class should have a
-# root attribute which uses the return value of #build_tree which you’ll write next.
+# root attribute which uses the return value of #build_tree which you will write next.
 class Tree
   attr_reader :ary, :root
 
@@ -29,15 +29,13 @@ class Tree
 
   # [x] #build_tree method which takes an array of data
   # (e.g. [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]) and turns it into a balanced
-  # binary tree full of Node objects appropriately placed (don’t forget to sort and remove
+  # binary tree full of Node objects appropriately placed (remember to sort and remove
   # duplicates!). The #build_tree method should return the level-1 root node.
 
   # from my merge sort project
   def merge(left, right)
     merged = []
-    until left.empty? || right.empty?
-      merged << (left.first <= right.first ? left : right).shift
-    end
+    merged << (left.first <= right.first ? left : right).shift until left.empty? || right.empty?
     merged + (right.empty? ? left : right)
   end
 
@@ -87,10 +85,7 @@ class Tree
   # adapted from https://www.geeksforgeeks.org/binary-search-tree-set-2-delete/?ref=lbp
   def min_value_node(node)
     current = node
-    while !current.left.nil?
-      current = current.left
-    end
-    current
+    current = current.left until current.left.nil?
   end
 
   # adapted from https://www.geeksforgeeks.org/binary-search-tree-set-2-delete/?ref=lbp
@@ -116,7 +111,7 @@ class Tree
         root.right = delete(temp.value, root.right)
       end
     end
-    return root
+    root
   end
 
   # [x] #find method which accepts a value and returns the node with the given value.
@@ -126,7 +121,7 @@ class Tree
 
     return find(value, root.right) if root.value < value
 
-    return find(value, root.left)
+    find(value, root.left)
   end
 
   # [x] #level_order method that returns an array of values.
@@ -140,7 +135,7 @@ class Tree
 
     queue = []
     queue.push(root)
-    while !queue.empty?
+    until queue.empty?
       node = queue.shift
       values.push(node.value)
       queue.push(node.left) if node.left
@@ -196,7 +191,7 @@ class Tree
     left_height = depth(node.left, count)
     right_height = depth(node.right, count)
     left_height > right_height ? count = left_height : count = right_height
-    count += 1
+    count + 1
   end
 
   # [x] #balanced? method which checks if the tree is balanced.
@@ -211,12 +206,12 @@ class Tree
     if (depth(node.left) - depth(node.right)).abs <= 1
       balanced?(node.left) && balanced?(node.right) ? true : false
     else
-      return false
+      false
     end
   end
 
   # [x] #rebalance method which rebalances an unbalanced tree.
-  # Tip: You’ll want to create a level-order array of the tree before passing the array back
+  # Tip: You will want to create a level-order array of the tree before passing the array back
   # into the #build_tree method.
   def rebalance
     @root = build_tree(level_order(@root))
