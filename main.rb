@@ -78,7 +78,7 @@ class Tree
   end
 
   def insert(value)
-    return if level_order.include? value
+    return if level_order(@root).include? value
 
     node = Node.new(value)
     insert_node(node)
@@ -135,12 +135,11 @@ class Tree
   # Tip: You will want to use an array acting as a queue to keep track of all the child nodes
   # that you have yet to traverse and to add new ones to the list (as you saw in the video).
   # adapted from https://www.youtube.com/watch?v=86g8jAQug04
-  def level_order
-    return if @root.nil?
+  def level_order(root, values = [])
+    return if root.nil?
 
-    values = []
     queue = []
-    queue.push(@root)
+    queue.push(root)
     while !queue.empty?
       node = queue.shift
       values.push(node.value)
@@ -184,7 +183,7 @@ class Tree
 
   def ordered_array(order_type)
     values = send(order_type, @root)
-    values.map(&:value)
+    order_type == :level_order ? values : values.map(&:value)
   end
 
   # [x] #depth method which accepts a node and returns the depth(number of levels) beneath the node.
@@ -220,7 +219,7 @@ class Tree
   # Tip: You’ll want to create a level-order array of the tree before passing the array back
   # into the #build_tree method.
   def rebalance
-    @root = build_tree(level_order)
+    @root = build_tree(level_order(@root))
   end
 
 =begin
@@ -239,7 +238,7 @@ class Tree
 
   def driver
     p balanced?
-    p level_order
+    p ordered_array(:level_order)
     p ordered_array(:preorder)
     p ordered_array(:postorder)
     p ordered_array(:inorder)
@@ -249,7 +248,7 @@ class Tree
     p balanced?
     rebalance
     p balanced?
-    p level_order
+    p ordered_array(:level_order)
     p ordered_array(:preorder)
     p ordered_array(:postorder)
     p ordered_array(:inorder)
@@ -262,43 +261,6 @@ class Tree
     pretty_print(node.left, "#{prefix}#{is_left ? " " : "│ "}", true) if node.left
   end
 end
-
-=begin
-tree = Tree.new([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 6346, 6347, 324, 1001, 1002, 1003, 1004])
-p tree.root
-p tree.ary
-tree.pretty_print
-tree.insert(10)
-tree.pretty_print
-tree.insert(63)
-tree.pretty_print
-tree.insert(63)
-tree.pretty_print
-tree.delete(23)
-tree.pretty_print
-tree.delete(10)
-tree.pretty_print
-tree.delete(5)
-tree.pretty_print
-tree.delete(67)
-tree.pretty_print
-tree.delete(150)
-tree.pretty_print
-p tree.find(23)
-p tree.find(1)
-p tree.level_order
-p tree.ordered_array(:inorder)
-p tree.ordered_array(:preorder)
-p tree.ordered_array(:postorder)
-p tree.depth(tree.root)
-p tree.balanced?
-tree.insert(6348)
-tree.pretty_print
-p tree.balanced?
-tree.rebalance
-tree.pretty_print
-p tree.balanced?
-=end
 
 ary = Array.new(15) { rand(1..100) }
 tree_for_driver = Tree.new(ary)
