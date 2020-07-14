@@ -181,7 +181,7 @@ class Tree
     values
   end
 
-  def ordered_array(order_type)
+  def order(order_type)
     values = send(order_type, @root)
     order_type == :level_order ? values : values.map(&:value)
   end
@@ -222,36 +222,31 @@ class Tree
     @root = build_tree(level_order(@root))
   end
 
-=begin
-  Write a simple driver script that does the following:
-
-  [x] 1. Create a binary search tree from an array of random numbers
-        (`Array.new(15) { rand(1..100) }`)
-  [x] 2. Confirm that the tree is balanced by calling `#balanced?`
-  [x] 3. Print out all elements in level, pre, post, and in order
-  [x] 4. try to unbalance the tree by adding several numbers > 100
-  [x] 5. Confirm that the tree is unbalanced by calling `#balanced?`
-  [x] 6. Balance the tree by calling `#rebalance`
-  [x] 7. Confirm that the tree is balanced by calling `#balanced?`
-  [x] 8. Print out all elements in level, pre, post, and in order
-=end
-
+  # Write a simple driver script that does the following:
+  # [x] 1. Create a binary search tree from an array of random numbers
+  # [x] 2. Confirm that the tree is balanced by calling `#balanced?`
+  # [x] 3. Print out all elements in level, pre, post, and in order
+  # [x] 4. try to unbalance the tree by adding several numbers > 100
+  # [x] 5. Confirm that the tree is unbalanced by calling `#balanced?`
+  # [x] 6. Balance the tree by calling `#rebalance`
+  # [x] 7. Confirm that the tree is balanced by calling `#balanced?`
+  # [x] 8. Print out all elements in level, pre, post, and in order
   def driver
     p balanced?
-    p ordered_array(:level_order)
-    p ordered_array(:pre_order)
-    p ordered_array(:post_order)
-    p ordered_array(:in_order)
+    p order(:level_order)
+    p order(:pre_order)
+    p order(:post_order)
+    p order(:in_order)
     insert(101)
     insert(303)
     insert(606)
     p balanced?
     rebalance
     p balanced?
-    p ordered_array(:level_order)
-    p ordered_array(:pre_order)
-    p ordered_array(:post_order)
-    p ordered_array(:in_order)
+    p order(:level_order)
+    p order(:pre_order)
+    p order(:post_order)
+    p order(:in_order)
   end
 
   # from the TOP instructions for this project
@@ -263,5 +258,4 @@ class Tree
 end
 
 ary = Array.new(15) { rand(1..100) }
-tree_for_driver = Tree.new(ary)
-tree_for_driver.driver
+Tree.new(ary).driver
