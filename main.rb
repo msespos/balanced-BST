@@ -154,29 +154,29 @@ class Tree
   # [x] #inorder, #preorder, and #postorder methods that returns an array of values. Each method
   # should traverse the tree in their respective depth-first order.
   # adapted from https://www.youtube.com/watch?v=gm8DUJJhmY4
-  def inorder(root, values = [])
+  def in_order(root, values = [])
     return if root.nil?
 
-    inorder(root.left, values)
+    in_order(root.left, values)
     values.push(root)
-    inorder(root.right, values)
+    in_order(root.right, values)
     values
   end
 
-  def preorder(root, values = [])
+  def pre_order(root, values = [])
     return if root.nil?
 
     values.push(root)
-    preorder(root.left, values)
-    preorder(root.right, values)
+    pre_order(root.left, values)
+    pre_order(root.right, values)
     values
   end
 
-  def postorder(root, values = [])
+  def post_order(root, values = [])
     return if root.nil?
 
-    postorder(root.left, values)
-    postorder(root.right, values)
+    post_order(root.left, values)
+    post_order(root.right, values)
     values.push(root)
     values
   end
@@ -239,9 +239,9 @@ class Tree
   def driver
     p balanced?
     p ordered_array(:level_order)
-    p ordered_array(:preorder)
-    p ordered_array(:postorder)
-    p ordered_array(:inorder)
+    p ordered_array(:pre_order)
+    p ordered_array(:post_order)
+    p ordered_array(:in_order)
     insert(101)
     insert(303)
     insert(606)
@@ -249,9 +249,9 @@ class Tree
     rebalance
     p balanced?
     p ordered_array(:level_order)
-    p ordered_array(:preorder)
-    p ordered_array(:postorder)
-    p ordered_array(:inorder)
+    p ordered_array(:pre_order)
+    p ordered_array(:post_order)
+    p ordered_array(:in_order)
   end
 
   # from the TOP instructions for this project
