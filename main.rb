@@ -224,16 +224,34 @@ class Tree
 =begin
   Write a simple driver script that does the following:
 
-  [] 1. Create a binary search tree from an array of random numbers
+  [x] 1. Create a binary search tree from an array of random numbers
         (`Array.new(15) { rand(1..100) }`)
-  [] 2. Confirm that the tree is balanced by calling `#balanced?`
-  [] 3. Print out all elements in level, pre, post, and in order
-  [] 4. try to unbalance the tree by adding several numbers > 100
-  [] 5. Confirm that the tree is unbalanced by calling `#balanced?`
-  [] 6. Balance the tree by calling `#rebalance`
-  [] 7. Confirm that the tree is balanced by calling `#balanced?`
-  [] 8. Print out all elements in level, pre, post, and in order
+  [x] 2. Confirm that the tree is balanced by calling `#balanced?`
+  [x] 3. Print out all elements in level, pre, post, and in order
+  [x] 4. try to unbalance the tree by adding several numbers > 100
+  [x] 5. Confirm that the tree is unbalanced by calling `#balanced?`
+  [x] 6. Balance the tree by calling `#rebalance`
+  [x] 7. Confirm that the tree is balanced by calling `#balanced?`
+  [x] 8. Print out all elements in level, pre, post, and in order
 =end
+
+  def driver
+    p balanced?
+    p level_order
+    p ordered_array(:preorder)
+    p ordered_array(:postorder)
+    p ordered_array(:inorder)
+    insert(101)
+    insert(303)
+    insert(606)
+    p balanced?
+    rebalance
+    p balanced?
+    p level_order
+    p ordered_array(:preorder)
+    p ordered_array(:postorder)
+    p ordered_array(:inorder)
+  end
 
   # from the TOP instructions for this project
   def pretty_print(node = root, prefix="", is_left = true)
@@ -243,6 +261,7 @@ class Tree
   end
 end
 
+=begin
 tree = Tree.new([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 6346, 6347, 324, 1001, 1002, 1003, 1004])
 p tree.root
 p tree.ary
@@ -277,3 +296,8 @@ p tree.balanced?
 tree.rebalance
 tree.pretty_print
 p tree.balanced?
+=end
+
+ary = Array.new(15) { rand(1..100) }
+tree_for_driver = Tree.new(ary)
+tree_for_driver.driver
