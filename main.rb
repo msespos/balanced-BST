@@ -49,20 +49,20 @@ class Tree
   end
 
   # adapted from https://www.youtube.com/watch?v=VCTP81Ij-EM&feature=youtu.be
-  def tree_from_array(ary, start, finish)
+  def build(ary, start, finish)
     return nil if start > finish
 
     midpoint = (start + finish) / 2
     root = Node.new(ary[midpoint])
-    root.left = tree_from_array(ary, start, midpoint - 1)
-    root.right = tree_from_array(ary, midpoint + 1, finish)
+    root.left = build(ary, start, midpoint - 1)
+    root.right = build(ary, midpoint + 1, finish)
     root
   end
 
   def build_tree(ary)
     ary.uniq!
     ary = merge_sort(ary)
-    tree_from_array(ary, 0, ary.length - 1)
+    build(ary, 0, ary.length - 1)
   end
 
   # [x] #insert and #delete method which accepts a value to insert/delete
@@ -81,7 +81,7 @@ class Tree
     return if level_order.include? value
 
     node = Node.new(value)
-    place_node(node)
+    insert_node(node)
   end
 
   # adapted from https://www.geeksforgeeks.org/binary-search-tree-set-2-delete/?ref=lbp
@@ -94,13 +94,14 @@ class Tree
   end
 
   # adapted from https://www.geeksforgeeks.org/binary-search-tree-set-2-delete/?ref=lbp
-  def delete(root, value)
+
+  def delete(value, root = @root)
     return root if root.nil?
 
     if value < root.value
-      root.left = delete(root.left, value)
+      root.left = delete(value, root.left)
     elsif value > root.value
-      root.right = delete(root.right, value)
+      root.right = delete(value, root.right)
     else
       if root.left.nil?
         temp = root.right
@@ -113,24 +114,20 @@ class Tree
       else
         temp = min_value_node(root.right)
         root.value = temp.value
-        root.right = delete(root.right, temp.value)
+        root.right = delete(temp.value, root.right)
       end
     end
     return root
   end
 
-  def remove_node_at_value(value)
-    delete(@root, value)
-  end
-
   # [x] #find method which accepts a value and returns the node with the given value.
   # adapted from https://www.geeksforgeeks.org/binary-search-tree-set-1-search-and-insertion/?ref=lbp
-  def find(root, value)
+  def find(value, root = @root)
     return root if root.nil? || root.value == value
 
-    return find(root.right, value) if root.value < value
+    return find(value, root.right) if root.value < value
 
-    return find(root.left, value)
+    return find(value, root.left)
   end
 
   # [x] #level_order method that returns an array of values.
@@ -159,7 +156,7 @@ class Tree
   # [x] #inorder, #preorder, and #postorder methods that returns an array of values. Each method
   # should traverse the tree in their respective depth-first order.
   # adapted from https://www.youtube.com/watch?v=gm8DUJJhmY4
-  def inorder(root, values)
+  def inorder(root, values = [])
     return if root.nil?
     inorder(root.left, values)
     values.push(root)
@@ -167,7 +164,7 @@ class Tree
     values
   end
 
-  def preorder(root, values)
+  def preorder(root, values = [])
     return if root.nil?
     values.push(root)
     preorder(root.left, values)
@@ -175,7 +172,7 @@ class Tree
     values
   end
 
-  def postorder(root, values)
+  def postorder(root, values = [])
     return if root.nil?
     postorder(root.left, values)
     postorder(root.right, values)
@@ -184,14 +181,13 @@ class Tree
   end
 
   def ordered_array(order_type)
-    values = []
-    values = send(order_type, @root, values)
+    values = send(order_type, @root)
     values.map(&:value)
   end
 
   # [x] #depth method which accepts a node and returns the depth(number of levels) beneath the node.
   # algorithm from https://www.educative.io/edpresso/finding-the-maximum-depth-of-a-binary-tree
-  def depth(node, count)
+  def depth(node, count = 0)
     return count if node.nil?
 
     return count if node.left.nil? && node.right.nil?
@@ -200,11 +196,6 @@ class Tree
     right_height = depth(node.right, count)
     left_height > right_height ? count = left_height : count = right_height
     count += 1
-  end
-
-  def depth_from_node(node)
-    count = 0
-    depth(node, count)
   end
 
   # [] #balanced? method which checks if the tree is balanced.
@@ -259,21 +250,20 @@ tree.insert(63)
 tree.pretty_print
 tree.insert(63)
 tree.pretty_print
-=begin
-tree.remove_node_at_value(23)
+tree.delete(23)
 tree.pretty_print
-tree.remove_node_at_value(10)
+tree.delete(10)
 tree.pretty_print
-tree.remove_node_at_value(5)
+tree.delete(5)
 tree.pretty_print
-tree.remove_node_at_value(67)
+tree.delete(67)
 tree.pretty_print
-tree.remove_node_at_value(150)
+tree.delete(150)
 tree.pretty_print
-p tree.find(tree.root, 23)
+p tree.find(23)
+p tree.find(1)
 p tree.level_order
 p tree.ordered_array(:inorder)
 p tree.ordered_array(:preorder)
 p tree.ordered_array(:postorder)
-p tree.depth_from_node(tree.root)
-=end
+p tree.depth(tree.root)
