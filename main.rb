@@ -146,6 +146,50 @@ class Tree
     values
   end
 
+  # adapted from https://www.geeksforgeeks.org/level-order-tree-traversal/
+  # Function to  print level order traversal of tree
+  def print_level_order(root)
+    h = height(root)
+    values = []
+    for i in 1..h+1
+      values.push(print_given_level(root, i)).flatten!
+    end
+    values
+  end
+
+  # adapted from https://www.geeksforgeeks.org/level-order-tree-traversal/
+  # Print nodes at a given level
+  def print_given_level(root, level, values = [])
+    return if root.nil?
+
+    if level == 1
+      values.push(root.value)
+    elsif level > 1
+      print_given_level(root.left , level-1, values)
+      print_given_level(root.right , level-1, values)
+    end
+    values
+  end
+
+  # adapted from https://www.geeksforgeeks.org/level-order-tree-traversal/
+  # Compute the height of a tree--the number of nodes
+  # along the longest path from the root node down to
+  # the farthest leaf node
+  def height(node)
+    return 0 if node.nil?
+
+    # Compute the height of each subtree
+    left_height = height(node.left)
+    right_height = height(node.right)
+
+    #Use the larger one
+    if left_height > right_height
+      return left_height + 1
+    else
+      return right_height + 1
+    end
+  end
+
   # [x] #inorder, #preorder, and #postorder methods that returns an array of values. Each method
   # should traverse the tree in their respective depth-first order.
   # adapted from https://www.youtube.com/watch?v=gm8DUJJhmY4
@@ -229,6 +273,7 @@ class Tree
   def driver
     p balanced?
     p order(:level_order)
+    p print_level_order(@root)
     p order(:pre_order)
     p order(:post_order)
     p order(:in_order)
@@ -239,6 +284,7 @@ class Tree
     rebalance
     p balanced?
     p order(:level_order)
+    p print_level_order(@root)
     p order(:pre_order)
     p order(:post_order)
     p order(:in_order)
