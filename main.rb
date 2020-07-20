@@ -148,14 +148,14 @@ class Tree
 
   # print nodes at a given level (recursive version)
   # adapted from https://www.geeksforgeeks.org/level-order-tree-traversal/
-  def print_given_level(root, level, values = [])
+  def given_level(root, level, values = [])
     return if root.nil?
 
     if level == 1
       values.push(root.value)
     elsif level > 1
-      print_given_level(root.left, level - 1, values)
-      print_given_level(root.right, level - 1, values)
+      given_level(root.left, level - 1, values)
+      given_level(root.right, level - 1, values)
     end
     values
   end
@@ -165,7 +165,7 @@ class Tree
   def level_order_rec(root)
     values = []
     (1..depth(root) + 1).each do |i|
-      values.push(print_given_level(root, i)).flatten!
+      values.push(given_level(root, i)).flatten!
     end
     values
   end
