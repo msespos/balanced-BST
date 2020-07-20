@@ -146,7 +146,7 @@ class Tree
     values
   end
 
-  # print nodes at a given level (recursive version)
+  # find and store nodes at a given level (recursive version)
   # adapted from https://www.geeksforgeeks.org/level-order-tree-traversal/
   def given_level(root, level, values = [])
     return if root.nil?
