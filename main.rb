@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # [x] Build a Node class. It should have attributes for the data it stores
 # as well as its left and right children.
 # [x] As a bonus, try including the Comparable module
@@ -67,7 +69,7 @@ class Tree
   # adapted from https://www.geeksforgeeks.org/binary-search-tree-set-1-search-and-insertion/?ref=lbp
   def insert_node(node, root = @root)
     if root.nil?
-      root = node
+      @root = node
     elsif root < node
       root.right.nil? ? root.right = node : insert_node(node, root.right)
     else
@@ -96,20 +98,18 @@ class Tree
       root.left = delete(value, root.left)
     elsif value > root.value
       root.right = delete(value, root.right)
+    elsif root.left.nil?
+      temp = root.right
+      root = nil
+      return temp
+    elsif root.right.nil?
+      temp = root.left
+      root = nil
+      return temp
     else
-      if root.left.nil?
-        temp = root.right
-        root = nil
-        return temp
-      elsif root.right.nil?
-        temp = root.left
-        root = nil
-        return temp
-      else
-        temp = min_value_node(root.right)
-        root.value = temp.value
-        root.right = delete(temp.value, root.right)
-      end
+      temp = min_value_node(root.right)
+      root.value = temp.value
+      root.right = delete(temp.value, root.right)
     end
     root
   end
@@ -154,8 +154,8 @@ class Tree
     if level == 1
       values.push(root.value)
     elsif level > 1
-      print_given_level(root.left , level-1, values)
-      print_given_level(root.right , level-1, values)
+      print_given_level(root.left, level - 1, values)
+      print_given_level(root.right, level - 1, values)
     end
     values
   end
@@ -164,7 +164,7 @@ class Tree
   # adapted from https://www.geeksforgeeks.org/level-order-tree-traversal/
   def level_order_rec(root)
     values = []
-    for i in 1..depth(root) + 1
+    (1..depth(root) + 1).each do |i|
       values.push(print_given_level(root, i)).flatten!
     end
     values
@@ -202,11 +202,7 @@ class Tree
 
   def order(order_type)
     values = send(order_type, @root)
-    if order_type == :level_order || order_type == :level_order_rec
-      values
-    else
-      values.map(&:value)
-    end
+    %i[level_order level_order_rec].include?(order_type) ? values : values.map(&:value)
   end
 
   # [x] #depth method which accepts a node and returns the depth(number of levels) beneath the node.
@@ -218,7 +214,7 @@ class Tree
 
     left_height = depth(node.left, count)
     right_height = depth(node.right, count)
-    left_height > right_height ? count = left_height : count = right_height
+    count = left_height > right_height ? left_height : right_height
     count + 1
   end
 
@@ -275,10 +271,10 @@ class Tree
   end
 
   # from the TOP instructions for this project
-  def pretty_print(node = root, prefix="", is_left = true)
-    pretty_print(node.right, "#{prefix}#{is_left ? "│ " : " "}", false) if node.right
-    puts "#{prefix}#{is_left ? "└── " : "┌── "}#{node.value.to_s}"
-    pretty_print(node.left, "#{prefix}#{is_left ? " " : "│ "}", true) if node.left
+  def pretty_print(node = root, prefix = '', is_left = true)
+    pretty_print(node.right, "#{prefix}#{is_left ? '│ ' : ' '}", false) if node.right
+    puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.value}"
+    pretty_print(node.left, "#{prefix}#{is_left ? ' ' : '│ '}", true) if node.left
   end
 end
 
