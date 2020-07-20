@@ -162,7 +162,7 @@ class Tree
 
   # print level order traversal of tree (second version; calls a recursive method)
   # adapted from https://www.geeksforgeeks.org/level-order-tree-traversal/
-  def print_level_order(root)
+  def level_order_rec(root)
     values = []
     for i in 1..depth(root) + 1
       values.push(print_given_level(root, i)).flatten!
@@ -202,7 +202,11 @@ class Tree
 
   def order(order_type)
     values = send(order_type, @root)
-    order_type == :level_order ? values : values.map(&:value)
+    if order_type == :level_order || order_type == :level_order_rec
+      values
+    else
+      values.map(&:value)
+    end
   end
 
   # [x] #depth method which accepts a node and returns the depth(number of levels) beneath the node.
@@ -253,7 +257,7 @@ class Tree
   def driver
     p balanced?
     p order(:level_order)
-    p print_level_order(@root)
+    p order(:level_order_rec)
     p order(:pre_order)
     p order(:post_order)
     p order(:in_order)
@@ -264,7 +268,7 @@ class Tree
     rebalance
     p balanced?
     p order(:level_order)
-    p print_level_order(@root)
+    p order(:level_order_rec)
     p order(:pre_order)
     p order(:post_order)
     p order(:in_order)
