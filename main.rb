@@ -146,19 +146,8 @@ class Tree
     values
   end
 
+  # print nodes at a given level (recursive version)
   # adapted from https://www.geeksforgeeks.org/level-order-tree-traversal/
-  # Function to  print level order traversal of tree
-  def print_level_order(root)
-    h = height(root)
-    values = []
-    for i in 1..h+1
-      values.push(print_given_level(root, i)).flatten!
-    end
-    values
-  end
-
-  # adapted from https://www.geeksforgeeks.org/level-order-tree-traversal/
-  # Print nodes at a given level
   def print_given_level(root, level, values = [])
     return if root.nil?
 
@@ -171,23 +160,14 @@ class Tree
     values
   end
 
+  # print level order traversal of tree (second version; calls a recursive method)
   # adapted from https://www.geeksforgeeks.org/level-order-tree-traversal/
-  # Compute the height of a tree--the number of nodes
-  # along the longest path from the root node down to
-  # the farthest leaf node
-  def height(node)
-    return 0 if node.nil?
-
-    # Compute the height of each subtree
-    left_height = height(node.left)
-    right_height = height(node.right)
-
-    #Use the larger one
-    if left_height > right_height
-      return left_height + 1
-    else
-      return right_height + 1
+  def print_level_order(root)
+    values = []
+    for i in 1..depth(root) + 1
+      values.push(print_given_level(root, i)).flatten!
     end
+    values
   end
 
   # [x] #inorder, #preorder, and #postorder methods that returns an array of values. Each method
